@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: "error-inspection-inspector"
-          path: dubbo-error-code-inspector/target/dubbo-error-code-inspector-1.0.0-SNAPSHOT.jar
+          path: dubbo-error-code-inspector/target/dubbo-*.jar
