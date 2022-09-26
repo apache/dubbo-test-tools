@@ -49,4 +49,4 @@ Legacy PR: https://github.com/apache/dubbo/pull/10663
 
 PR about GitHub Actions configuration: https://github.com/apache/dubbo/pull/10680
 
-PR about 'Another Changes': https://github.com/apache/dubbo/pull/10678
+PR about 'Another Changes' in https://github.com/apache/dubbo/pull/10663: https://github.com/apache/dubbo/pull/10678
