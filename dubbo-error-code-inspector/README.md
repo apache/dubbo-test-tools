@@ -36,11 +36,17 @@ This module is the detailed implementation of mechanism that checks (document li
    (a). Change directory to dubbo-error-code-inspector and execute `mvn package`.
    (b). In the `target` directory, execute `java -jar dubbo-error-code-inspector-1.0.0-SNAPSHOT.jar <Path to Dubbo Source>`
 
-# 原先在 dubbo 仓库的关于这一 PR 的提交记录 / Related PR in 'dubbo' repository
+# 原先在 dubbo 仓库的关于此的 PR / Related PR in 'dubbo' repository
+## 中文
 请参考 https://github.com/apache/dubbo/pull/10663 。
+
 关于这一功能的 GitHub Actions 配置的 PR，请参考 https://github.com/apache/dubbo/pull/10680 。
+
 关于这一 PR “另外的修改” 这一部分，请参考 https://github.com/apache/dubbo/pull/10678 。
 
+## English
 Legacy PR: https://github.com/apache/dubbo/pull/10663
+
 PR about GitHub Actions configuration: https://github.com/apache/dubbo/pull/10680
+
 PR about 'Another Changes': https://github.com/apache/dubbo/pull/10678
