@@ -20,12 +20,15 @@ package org.apache.dubbo.errorcode.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -96,12 +99,13 @@ public final class FileUtils {
     }
 
     public static List<String> loadConfigurationFileInResources(String path) {
-        String resourceFilePath = getResourceFilePath(path);
+
+        ReadableByteChannel resourceReadableByteChannel = Channels.newChannel(
+                Objects.requireNonNull(FileUtils.class.getClassLoader().getResourceAsStream(path)));
 
         List<String> lines = new ArrayList<>();
 
-        try (FileChannel channel = FileChannel.open(Paths.get(resourceFilePath));
-             Scanner scanner = new Scanner(channel)) {
+        try (Scanner scanner = new Scanner(resourceReadableByteChannel)) {
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
@@ -112,12 +116,17 @@ public final class FileUtils {
             }
 
             return lines;
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * <p>Get absolute path of resource.
+     *
+     * <p>Retained for testing. It won't work in JAR.
+     *
+     * @param path relative path of resources folder.
+     * @return absolute path of resource
+     */
     public static String getResourceFilePath(String path) {
         String resourceFilePath = FileUtils.class.getClassLoader().getResource(path).toString();
 
