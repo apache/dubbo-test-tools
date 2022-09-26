@@ -42,7 +42,7 @@ This module is the detailed implementation of mechanism that checks (document li
 
 关于这一功能的 GitHub Actions 配置的 PR，请参考 https://github.com/apache/dubbo/pull/10680 。
 
-关于这一 PR “另外的修改” 这一部分，请参考 https://github.com/apache/dubbo/pull/10678 。
+关于 https://github.com/apache/dubbo/pull/10663 这一 PR “另外的修改” 这一部分，请参考 https://github.com/apache/dubbo/pull/10678 。
 
 ## English
 Legacy PR: https://github.com/apache/dubbo/pull/10663
