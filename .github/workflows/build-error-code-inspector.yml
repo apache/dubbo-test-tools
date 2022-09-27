@@ -1,0 +1,35 @@
+name: Build Error Code Inspector
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  run-tests:
+    name: Build Error Code Inspector
+    if: always()
+
+    runs-on: ubuntu-latest
+    env:
+      JAVA_VER: 8
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK ${{ matrix.jdk }}"
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: "Chmod mvnw"
+        run: chmod +x mvnw
+
+      - name: "Build Error Code Inspector"
+        run: |
+          cd dubbo-error-code-inspector
+          ../mvnw --batch-mode --no-snapshot-updates -e --no-transfer-progress --fail-fast clean install -DskipTests=true -DskipIntegrationTests=true -Dcheckstyle.skip=true -Dcheckstyle_unix.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true
+          
+      - name: "Upload Error Code Inspector Package"
+        uses: actions/upload-artifact@v2
+        with:
+          name: "error-inspection-inspector"
+          path: dubbo-error-code-inspector/target/dubbo-*.jar
