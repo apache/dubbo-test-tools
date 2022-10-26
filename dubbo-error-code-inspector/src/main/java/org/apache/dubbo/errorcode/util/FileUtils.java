@@ -17,6 +17,8 @@
 
 package org.apache.dubbo.errorcode.util;
 
+import org.apache.dubbo.errorcode.config.ErrorCodeInspectorConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -27,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -137,5 +140,19 @@ public final class FileUtils {
         }
 
         return resourceFilePath;
+    }
+
+    public static List<Path> getAllClassFilesInDirectory(Path codeBaseFolder, Path moduleFolder) {
+        try (Stream<Path> classFilesStream = Files.walk(moduleFolder)) {
+
+            return classFilesStream
+                    .filter(x -> x.toFile().isFile())
+                    .filter(x -> !ErrorCodeInspectorConfig.EXCLUSIONS.contains(codeBaseFolder.relativize(x).toString()))
+                    .collect(Collectors.toList());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 }

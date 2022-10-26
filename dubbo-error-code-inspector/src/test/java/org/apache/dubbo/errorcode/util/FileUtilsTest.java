@@ -17,8 +17,13 @@
 
 package org.apache.dubbo.errorcode.util;
 
+import org.apache.dubbo.errorcode.config.ErrorCodeInspectorConfig;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Tests of FileUtils.
@@ -39,6 +44,20 @@ class FileUtilsTest {
         byte[] magic = new byte[]{(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
         byte[] actualBytes = new byte[]{bytes[0], bytes[1], bytes[2], bytes[3]};
 
-        Assertions.assertArrayEquals(actualBytes, magic);
+        Assertions.assertArrayEquals(magic, actualBytes);
+    }
+
+    @Test
+    void testIgnoranceOfGetAllClassFilesInDirectory() {
+        ErrorCodeInspectorConfig.EXCLUSIONS.add(
+                "testing-mock-source\\target\\classes\\org\\apache\\dubbo\\errorcode\\mock\\GrandChildClass.class");
+
+        Path p = Paths.get(FileUtils.getResourceFilePath("FileCacheStore.jcls")).getParent();
+        Path p2 = Paths.get(p.toString(), "mock-source");
+        Path p3 = Paths.get(p2.toString(), "testing-mock-source");
+        Path p4 = Paths.get(p3.toString(), "target", "classes",
+                "org", "apache", "dubbo", "errorcode", "mock", "GrandChildClass.class");
+
+        Assertions.assertFalse(FileUtils.getAllClassFilesInDirectory(p2, p3).contains(p4));
     }
 }

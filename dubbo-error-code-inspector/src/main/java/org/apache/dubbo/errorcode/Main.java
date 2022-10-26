@@ -28,8 +28,6 @@ import org.apache.dubbo.errorcode.model.MethodDefinition;
 import org.apache.dubbo.errorcode.reporter.InspectionResult;
 import org.apache.dubbo.errorcode.util.FileUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -44,7 +42,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Error code extractor main class.
@@ -168,12 +165,9 @@ public class Main {
                                                   CountDownLatch countDownLatch,
                                                   Path folder) {
 
-        try (Stream<Path> classFilesStream = Files.walk(folder)) {
+        try {
 
-            List<Path> classFiles = classFilesStream
-                .filter(x -> x.toFile().isFile())
-                .filter(x -> !ErrorCodeInspectorConfig.EXCLUSIONS.contains(Paths.get(directoryToInspect).relativize(x).toString()))
-                .collect(Collectors.toList());
+            List<Path> classFiles = FileUtils.getAllClassFilesInDirectory(Paths.get(directoryToInspect), folder);
 
             classFiles.forEach(x -> {
 
@@ -189,8 +183,6 @@ public class Main {
                 }
             });
 
-        } catch (IOException ignored) {
-            // ignored.
         } finally {
             countDownLatch.countDown();
         }
