@@ -20,10 +20,12 @@ package org.apache.dubbo.errorcode.config;
 import org.apache.dubbo.errorcode.reporter.Reporter;
 import org.apache.dubbo.errorcode.util.FileUtils;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Configuration of Error Code Inspector.
@@ -38,13 +40,12 @@ public class ErrorCodeInspectorConfig {
             Boolean.getBoolean("dubbo.eci.report-as-error") ||
             Boolean.parseBoolean(System.getenv("dubbo.eci.report-as-error"));
 
-    public static final List<Reporter> REPORTERS;
+    public static final List<Reporter> REPORTERS = loadReporters();
 
-    public static final List<String> EXCLUSIONS = FileUtils.loadConfigurationFileInResources("exclusions.cfg");
+    public static final List<String> EXCLUSIONS = loadExclusions();
 
-    static {
+    private static List<Reporter> loadReporters() {
         List<String> classNames = FileUtils.loadConfigurationFileInResources("reporter-classes.cfg");
-
         List<Reporter> tempReporters = new ArrayList<>();
 
         for (String clsName : classNames) {
@@ -60,6 +61,12 @@ public class ErrorCodeInspectorConfig {
             }
         }
 
-        REPORTERS = Collections.unmodifiableList(tempReporters);
+        return Collections.unmodifiableList(tempReporters);
+    }
+
+    private static List<String> loadExclusions() {
+        List<String> exclusions = FileUtils.loadConfigurationFileInResources("exclusions.cfg");
+
+        return exclusions.stream().map(x -> x.replace('\\', File.separatorChar)).collect(Collectors.toList());
     }
 }

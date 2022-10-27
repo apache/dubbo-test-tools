@@ -17,8 +17,14 @@
 
 package org.apache.dubbo.errorcode.util;
 
+import org.apache.dubbo.errorcode.config.ErrorCodeInspectorConfig;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Tests of FileUtils.
@@ -39,6 +45,22 @@ class FileUtilsTest {
         byte[] magic = new byte[]{(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
         byte[] actualBytes = new byte[]{bytes[0], bytes[1], bytes[2], bytes[3]};
 
-        Assertions.assertArrayEquals(actualBytes, magic);
+        Assertions.assertArrayEquals(magic, actualBytes);
+    }
+
+    @Test
+    void testIgnoranceOfGetAllClassFilesInDirectory() {
+        ErrorCodeInspectorConfig.EXCLUSIONS.add(
+                "testing-mock-source\\target\\classes\\org\\apache\\dubbo\\errorcode\\mock\\GrandChildClass.class"
+                        .replace('\\', File.separatorChar));
+
+        Path rootOfResources = Paths.get(FileUtils.getResourceFilePath("FileCacheStore.jcls")).getParent();
+
+        Path mockCodeBasePath = Paths.get(rootOfResources.toString(), "mock-source");
+        Path mockModulePath = Paths.get(mockCodeBasePath.toString(), "testing-mock-source");
+        Path fileToIgnore = Paths.get(mockModulePath.toString(), "target", "classes",
+                "org", "apache", "dubbo", "errorcode", "mock", "GrandChildClass.class");
+
+        Assertions.assertFalse(FileUtils.getAllClassFilesInDirectory(mockCodeBasePath, mockModulePath).contains(fileToIgnore));
     }
 }
