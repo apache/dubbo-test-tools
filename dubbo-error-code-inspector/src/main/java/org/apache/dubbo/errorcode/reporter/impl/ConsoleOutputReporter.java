@@ -26,10 +26,6 @@ import org.apache.dubbo.errorcode.reporter.Reporter;
 public class ConsoleOutputReporter implements Reporter {
     @Override
     public void report(InspectionResult inspectionResult) {
-        System.out.println("All error codes: " + inspectionResult.getAllErrorCodes());
-        System.out.println();
-        System.out.println("Error codes which document links are not reachable: " + inspectionResult.getLinkNotReachableErrorCodes());
-        System.out.println();
-        System.out.println(StringifyUtil.generateIllegalInvocationString(inspectionResult));
+        StringifyUtil.outputStringifyText(inspectionResult, System.out);
     }
 }

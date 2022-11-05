@@ -26,6 +26,7 @@ import org.apache.dubbo.errorcode.linktest.LinkTestingForkJoinTask;
 import org.apache.dubbo.errorcode.model.LoggerMethodInvocation;
 import org.apache.dubbo.errorcode.model.MethodDefinition;
 import org.apache.dubbo.errorcode.reporter.InspectionResult;
+import org.apache.dubbo.errorcode.util.ErrorCodeStringComparator;
 import org.apache.dubbo.errorcode.util.FileUtils;
 
 import java.nio.file.Path;
@@ -150,9 +151,17 @@ public class Main {
         inspectionResult.setAllErrorCodes(
             codes.stream()
                 .distinct()
-                .sorted().collect(Collectors.toList()));
+                .sorted(ErrorCodeStringComparator.getInstance())
+                .collect(Collectors.toList())
+        );
 
-        inspectionResult.setLinkNotReachableErrorCodes(linksNotReachable);
+        inspectionResult.setLinkNotReachableErrorCodes(
+            linksNotReachable.stream()
+                .distinct()
+                .sorted(ErrorCodeStringComparator.getInstance())
+                .collect(Collectors.toList())
+        );
+
         inspectionResult.setIllegalInvocations(illegalInvocationClassesAndLoggerMethods);
         inspectionResult.setInvalidLoggerMethodInvocationLocations(invalidLoggerMethodInvocationLocations);
 
