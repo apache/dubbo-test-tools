@@ -21,7 +21,7 @@ import java.io.File;
 import java.util.Comparator;
 
 /**
- * Comparator for Error codes.
+ * Comparator for File paths.
  */
 public final class FilePathComparator implements Comparator<String> {
 
