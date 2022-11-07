@@ -32,12 +32,7 @@ public class FileOutputReporter implements Reporter {
     @Override
     public void report(InspectionResult inspectionResult) {
         try (PrintStream printStream = new PrintStream(Files.newOutputStream(Paths.get(System.getProperty("user.dir"), "error-inspection-result.txt")))) {
-
-            printStream.println("All error codes: " + inspectionResult.getAllErrorCodes());
-            printStream.println();
-            printStream.println("Error codes which document links are not reachable: " + inspectionResult.getLinkNotReachableErrorCodes());
-            printStream.println();
-            printStream.println(StringifyUtil.generateIllegalInvocationString(inspectionResult));
+            StringifyUtil.outputStringifyText(inspectionResult, printStream);
 
         } catch (IOException e) {
             throw new RuntimeException(e);

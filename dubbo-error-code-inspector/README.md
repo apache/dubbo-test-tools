@@ -29,7 +29,6 @@ This module is the detailed implementation of mechanism that checks (document li
 2. 方式 2
 
    a. 切换到 dubbo-error-code-inspector 目录下执行 `mvn package` 打包。<br /><br />
-
    b. 之后在 `target` 目录下运行 `java -jar dubbo-error-code-inspector-1.0.0-SNAPSHOT.jar <Dubbo 源码路径>` 即可。
 
 ### English
@@ -41,7 +40,6 @@ This module is the detailed implementation of mechanism that checks (document li
 2. Method 2
 
    (a). Change directory to `dubbo-error-code-inspector` and execute `mvn package`. <br /><br />
-
    (b). In the `target` directory, execute `java -jar dubbo-error-code-inspector-1.0.0-SNAPSHOT.jar <Path to Dubbo Source>`
 
 # 原先在 dubbo 仓库的关于此的 PR / Related PR in 'dubbo' repository

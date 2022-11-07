@@ -18,12 +18,13 @@
 package org.apache.dubbo.errorcode.reporter.impl;
 
 import org.apache.dubbo.errorcode.model.LoggerMethodInvocation;
-import org.apache.dubbo.errorcode.model.MethodDefinition;
 import org.apache.dubbo.errorcode.reporter.InspectionResult;
+import org.apache.dubbo.errorcode.util.FilePathComparator;
 import org.apache.dubbo.errorcode.util.FileUtils;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Utility of generating string content.
@@ -33,14 +34,26 @@ final class StringifyUtil {
         throw new UnsupportedOperationException("No instance of StringifyUtil for you! ");
     }
 
+    static void outputStringifyText(InspectionResult inspectionResult, PrintStream outputStream) {
+        List<String> errorCodes = inspectionResult.getAllErrorCodes();
+        List<String> notReachable = inspectionResult.getLinkNotReachableErrorCodes();
+
+        outputStream.println("All error codes: " + errorCodes + ", totally " + errorCodes.size() + " codes.");
+        outputStream.println();
+        outputStream.println("Error codes which document links are not reachable: " + notReachable + ", totally " + notReachable.size() + " codes.");
+        outputStream.println();
+        outputStream.println(StringifyUtil.generateIllegalInvocationString(inspectionResult));
+    }
+
     static String generateIllegalInvocationString(InspectionResult inspectionResult) {
         StringBuilder illegalInvocationReportStringBuilder = new StringBuilder();
         illegalInvocationReportStringBuilder.append("Illegal logger method invocations: ");
         illegalInvocationReportStringBuilder.append('\n');
 
-        for (Map.Entry<String, List<MethodDefinition>> entry : inspectionResult.getIllegalInvocations().entrySet()) {
+        List<String> sortedFileNameKeys = new ArrayList<>(inspectionResult.getIllegalInvocations().keySet());
+        sortedFileNameKeys.sort(FilePathComparator.getInstance());
 
-            String key = entry.getKey();
+        for (String key : sortedFileNameKeys) {
 
             illegalInvocationReportStringBuilder.append(FileUtils.getSourceFilePathFromClassFilePath(key));
 
