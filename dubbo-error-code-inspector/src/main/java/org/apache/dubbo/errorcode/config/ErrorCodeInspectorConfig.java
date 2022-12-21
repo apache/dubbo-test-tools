@@ -38,7 +38,7 @@ public class ErrorCodeInspectorConfig {
 
     public static final boolean REPORT_AS_ERROR =
             Boolean.getBoolean("dubbo.eci.report-as-error") ||
-            Boolean.parseBoolean(System.getenv("dubbo.eci.report-as-error"));
+            Boolean.parseBoolean(System.getenv("DUBBO_ECI_REPORT_AS_ERROR"));
 
     public static final List<Reporter> REPORTERS = loadReporters();
 
