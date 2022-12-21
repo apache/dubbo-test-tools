@@ -1,3 +1,5 @@
+[中文](README.zh.md)
+
 This module is the detailed implementation of mechanism that checks (document links of) error code in logger invocations.
 
 # Features
