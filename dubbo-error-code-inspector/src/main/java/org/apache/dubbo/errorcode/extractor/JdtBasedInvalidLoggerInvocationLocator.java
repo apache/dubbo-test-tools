@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,6 +59,11 @@ public class JdtBasedInvalidLoggerInvocationLocator implements InvalidLoggerInvo
     private static final String JDT_CORE_COMPILER_SOURCE_PROPERTY_KEY = "org.eclipse.jdt.core.compiler.source";
 
     private static final String JDT_CORE_COMPILER_SOURCE_VERSION = "17";
+
+    private static final BinaryOperator<List<Integer>> LINENO_MERGE_FUNC = (currentList, appendedList) -> {
+        currentList.addAll(appendedList);
+        return currentList;
+    };
 
     @Override
     public List<LoggerMethodInvocation> locateInvalidLoggerInvocation(String classFile) {
@@ -174,7 +180,7 @@ public class JdtBasedInvalidLoggerInvocationLocator implements InvalidLoggerInvo
 
                 return stmts.get(0).getExpression().toString();
 
-            }, Map.Entry::getValue));
+            }, Map.Entry::getValue, LINENO_MERGE_FUNC));
 
         return lineOfInvocation;
     }

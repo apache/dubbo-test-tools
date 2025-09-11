@@ -33,4 +33,11 @@ public class ParentClass {
     public void validInvocation() {
         logger.warn("31-1", "A", "B", "Testing in ParentClass! ");
     }
+
+    public void validInvocationWithDiffFormat() {
+        logger.warn("31-1",
+                "A",
+                "B",
+                "Testing in ParentClass! ");
+    }
 }
